@@ -3,7 +3,7 @@
 ### HOW TO USE
 * **IMPORTANT** - make sure you're not behind a proxy, otherwise it could be that some data is not fetched properly or NullPointerException is obtained
 * Create **Symbol.xlsx** under the desired location (an example file is packed within the root folder)
-* Fill out the first cell (upper left corner) of the Symbol.xlsx file with a supported symbol, as you can also add additional symbols below this one - **one per cell** (TBD: multiple symbols are supported, however not properly handled yet)  
+* Fill out the first cell (upper left corner) of the Symbol.xlsx file with a supported symbol, as you can also add additional symbols below this one - **one per cell**  
 * **Save** and **close** the file  
 * Navigate to the file location with the "Choose" button    
 * Select the Symbol.xlsx file and click on "Get report"  
