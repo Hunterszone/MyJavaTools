@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.*;
@@ -31,11 +32,11 @@ public class TradingApplication extends javax.swing.JFrame {
     private javax.swing.JLabel outputText;
     private String linkLogo = "";
     private String linkLogoSymbol = "";
-    private URL urlLogo;
-    private Image image = null;
-    private JLabel labelLogo = new JLabel();
+    private static Image image = null;
     private ConnectionToAPI connectionToAPI;
-
+    static OpenUrlAction urlAction;
+    static JLabel labelLogo = new JLabel();
+    static URL urlLogo;
     public static String path2 = "";
     public static String[] companyNames = {"AAPL", "GOOGL", "BAM", "XOM", "BUD", "INTC", "C", "FB",
             "ORCL", "BAC", "MSFT", "HD", "PFE", "PG", "JPM", "AMZN", "UNH", "T", "VZ",
@@ -73,8 +74,8 @@ public class TradingApplication extends javax.swing.JFrame {
         labelLogo = new JLabel(new ImageIcon(image));
         labelLogo.setText("Logo URL:  " + linkLogo + linkLogoSymbol + ".png");
         labelLogo.setFont(labelLogo.getFont().deriveFont(13f));
+        labelLogo.addMouseListener(urlAction);
         mainPanel.add(labelLogo, BorderLayout.CENTER);
-
         repaint();
         revalidate();
     }
@@ -377,7 +378,7 @@ public class TradingApplication extends javax.swing.JFrame {
                             e.printStackTrace();
                         }
                     }
-                    if (terminate.get() == true)
+                    if (terminate.get())
                         appTitle.setText("API Extractor");
                     jProgressBar1.setValue(0);
                     labelLogo.setIcon(new ImageIcon(image));
@@ -386,14 +387,11 @@ public class TradingApplication extends javax.swing.JFrame {
                 }
             }
         }.start();
-
-
+        labelLogo.addMouseListener(urlAction);
     }
 
     public static void main(String args[]) {
-
-        java.awt.EventQueue.invokeLater(() -> {
-            new TradingApplication().setVisible(true);
-        });
+        java.awt.EventQueue.invokeLater(() -> new TradingApplication().setVisible(true));
+        urlAction = new OpenUrlAction();
     }
 }
