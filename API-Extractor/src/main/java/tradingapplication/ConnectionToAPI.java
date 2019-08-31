@@ -17,7 +17,6 @@ import org.json.simple.parser.ParseException;
 public class ConnectionToAPI {
 
     private String gettingResponseFromAPI(String symbol) throws FileNotFoundException {
-
         try {
             //URLs which hold path to api, filtered by zero symbol - TBD for all symbols in the XLSX file
             for (String companyName:TradingApplication.companyNames) {
@@ -48,7 +47,6 @@ public class ConnectionToAPI {
                     return sResponse;
                 }
             }
-
         } catch (MalformedURLException ex) {
             CustomLogger log = new CustomLogger();
             log.addToLog("Exception caught: " + ex);
@@ -84,17 +82,13 @@ public class ConnectionToAPI {
             String response = gettingResponseFromAPI(symbol);
             //calling method for parsing response in JSON object
             JSONObject result = parsingJSON(symbol, response);
-
             if (result != null) {
-
                 log.addToLog("Adding: " + symbol.toUpperCase());
                 System.out.println("Data imported");
-
             } else {
                 log.addToLog(System.getProperty("line.separator"));
                 return new Object[]{symbol.toUpperCase(), 0, 0, 0, "NO DATA"};
             }
-
         }
         catch (ParseException | FileNotFoundException e) {
             CustomLogger log = new CustomLogger();
@@ -106,10 +100,8 @@ public class ConnectionToAPI {
     }
 
     public String[] extractPrices(Object symbol) {
-
         JSONParser parser = new JSONParser();
         JSONObject json = null;
-
         try {
             String jsonRespBlock = gettingResponseFromAPI((String)symbol);
             json = (JSONObject) parser.parse(jsonRespBlock);
@@ -118,7 +110,6 @@ public class ConnectionToAPI {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
         Object latestPrice = json.get( "latestPrice" );
         Object calculationPrice = json.get( "calculationPrice" );
         Object iexRealtimePrice = json.get( "iexRealtimePrice" );
@@ -144,8 +135,6 @@ public class ConnectionToAPI {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-
         return new String[]{symbol.toString(), latestPrice.toString()};
     }
-
 }
