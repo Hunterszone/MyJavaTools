@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.*;
@@ -99,9 +98,10 @@ public class TradingApplication extends javax.swing.JFrame {
     private Object[][] addingValuesToArrays(ArrayList<String> listOfStockSymbols) throws JSONException, IOException {
         connectionToAPI = new ConnectionToAPI();
         for (String symbol : listOfStockSymbols)
-            connectionToAPI.extractPrices(symbol);
+            if(symbol != "" && symbol != null)
+                connectionToAPI.extractPrices(symbol);
         log.writeLogToDisk("\\apiLog.json");
-        Object[][] mainDataArrays = new Object[listOfStockSymbols.size() + 1][5];
+        Object[][] mainDataArrays = new Object[listOfStockSymbols.size()+1][5];
         final AtomicBoolean terminate = new AtomicBoolean(false);
         new Thread("Adding values") {
             @Override
