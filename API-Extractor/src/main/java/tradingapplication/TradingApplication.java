@@ -101,7 +101,7 @@ public class TradingApplication extends javax.swing.JFrame {
             if(symbol != "" && symbol != null)
                 connectionToAPI.extractPrices(symbol);
         log.writeLogToDisk("\\apiLog.json");
-        Object[][] mainDataArrays = new Object[listOfStockSymbols.size()+1][5];
+        Object[][] mainDataArrays = new Object[listOfStockSymbols.size()][listOfStockSymbols.size()];
         final AtomicBoolean terminate = new AtomicBoolean(false);
         new Thread("Adding values") {
             @Override
