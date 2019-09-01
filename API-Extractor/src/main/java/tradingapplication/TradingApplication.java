@@ -136,13 +136,13 @@ public class TradingApplication extends javax.swing.JFrame {
         return mainDataArrays;
     }
 
-    void loadValues() throws FileNotFoundException {
+    Object[][] loadValues() throws FileNotFoundException {
+        Object[][] mainDataArrays = null;
         try {
             for (String companyName : companyNames) {
                 if (companyName.equalsIgnoreCase(ImportExcel.importSymbolsFromExcel(TradingApplication.path2).get(0))) {
-                    ArrayList<String> listOfStockSymbols = listOfStockSymbols();
                     //instantiate 2d array for values which size is equal to a size of symbols list plus rows header
-                    Object[][] mainDataArrays = addingValuesToArrays(listOfStockSymbols);
+                    mainDataArrays = addingValuesToArrays(listOfStockSymbols());
                     log.addToLog("Values have been successfully loaded from IEXTrading API." + "\n");
                 }
             }
@@ -155,7 +155,7 @@ public class TradingApplication extends javax.swing.JFrame {
         } catch (JSONException | IOException ex) {
             log.addToLog("Exception caught:" + ex);
         }
-
+        return mainDataArrays;
     }
 
     private void initComponents() {
@@ -348,7 +348,6 @@ public class TradingApplication extends javax.swing.JFrame {
                     "Path is not selected",
                     JOptionPane.INFORMATION_MESSAGE);
         }
-
     }
 
     private void showPartnerButton(java.awt.event.ActionEvent evt) {

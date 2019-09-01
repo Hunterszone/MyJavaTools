@@ -16,24 +16,28 @@ import org.json.simple.parser.ParseException;
 
 public class ConnectionToAPI {
 
+    private static final String API_KEY = "pk_f95f594bc33048ac835258af34c1910b";
+
     private String gettingResponseFromAPI(String symbol) throws FileNotFoundException {
         try {
             //URLs which hold path to api, filtered by zero symbol - TBD for all symbols in the XLSX file
             for (String companyName:TradingApplication.companyNames) {
                 if(companyName.equalsIgnoreCase(ImportExcel.importSymbolsFromExcel(TradingApplication.path2).get(0))){
-                    String urlSymbol = "https://api.iextrading.com/1.0/stock/" + symbol.toLowerCase() +"/quote";
-                    String urlLogo = "https://storage.googleapis.com/iex/api/logos/" + symbol.toUpperCase() +".png";
 
+                    //Define endpoints and log the output
+                    String urlSymbol = "https://cloud.iexapis.com/stable/stock/" + symbol.toLowerCase() +"/quote?token=" + API_KEY;
+                    String urlLogo = "https://storage.googleapis.com/iex/api/logos/" + symbol.toUpperCase() +".png";
                     CustomLogger log = new CustomLogger();
                     log.addToLog("Retrieving symbol for " + symbol.toUpperCase() + " from IEXTrading API: " + urlSymbol + "\n");
                     log.addToLog("Retrieving logoPNG for " + symbol.toUpperCase() + " from IEXTrading API: " + urlLogo + "\n");
 
+                    //GET response from API
                     //System.out.println("attempt: " + (++br));
                     URL obj = new URL(urlSymbol);
                     HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-
-                    //GET from API
                     con.setRequestMethod("GET");
+                    con.connect();
+                    int code = con.getResponseCode();
                     BufferedReader in = new BufferedReader(
                             new InputStreamReader(con.getInputStream()));
                     String inputLine;
@@ -43,7 +47,8 @@ public class ConnectionToAPI {
                     }
                     in.close();
                     String sResponse = response.toString();
-                    log.addToLog("Response from server: " + response.toString());
+                    log.addToLog("JSON response from server: " + response.toString());
+                    System.out.println("Returned HTTP status code: " + code);
                     return sResponse;
                 }
             }
