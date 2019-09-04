@@ -28,13 +28,9 @@ public class ImportExcel {
                 }
             }
         } catch (IOException e) {
-            try {
-                CustomLogger log = new CustomLogger();
-                log.addToLog("Entry failed" + "\n");
-                log.addToLog(System.getProperty("line.separator"));
-            } catch (FileNotFoundException ex) {
-                java.util.logging.Logger.getLogger(ImportExcel.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            CustomLogger log = new CustomLogger();
+            log.addToLog("Entry failed" + "\n");
+            log.addToLog(System.getProperty("line.separator"));
         }
         return allSymbols;
     }

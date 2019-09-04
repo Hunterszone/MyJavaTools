@@ -2,36 +2,37 @@ package tradingapplication;
 
 import javax.swing.filechooser.FileSystemView;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
-public class CustomLogger {
+class CustomLogger {
     
-    static StringBuilder sb = new StringBuilder();
+    private static StringBuilder sb = new StringBuilder();
     
-    public void addToLog(String parameter) throws FileNotFoundException {
+    void addToLog(String parameter) {
         long currentDateTime = System.currentTimeMillis();
         Date currentDate = new Date(currentDateTime);
-        sb.append(currentDate + "\n");
-        sb.append(parameter).append(System.getProperty("line.separator"));
+        sb
+                .append(currentDate)
+                .append("\n")
+                .append(parameter)
+                .append(System.getProperty("line.separator"));
     }
     
-    public void writeLogToDisk (String fileName){
+    void writeLogToDisk (String fileName){
         try {
             String desktopPath = FileSystemView.getFileSystemView().getHomeDirectory().toString();
             FileOutputStream out = new FileOutputStream(desktopPath + fileName);
-            OutputStreamWriter w = new OutputStreamWriter(out, "UTF-8");
+            OutputStreamWriter w = new OutputStreamWriter(out, StandardCharsets.UTF_8);
             w.append(sb);
             w.flush();
             w.close();
-    } catch (UnsupportedEncodingException ex) {
-            System.out.println("Caught" + ex);
         } catch (IOException ex) {
             System.out.println("Caught" + ex);
         }
-        
     }
 
-    public static boolean checkIfFileIsOpened(String fileName){
+    static boolean checkIfFileIsOpened(String fileName){
         File file = new File(fileName);
 
         // try to rename the file with the same name

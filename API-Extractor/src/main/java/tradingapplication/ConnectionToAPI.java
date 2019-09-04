@@ -1,7 +1,6 @@
 package tradingapplication;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -21,7 +20,7 @@ public class ConnectionToAPI {
     private static final String SYMBOLS_ENDPOINT = "https://cloud.iexapis.com/stable/stock/";
     private static final String LOGOS_ENDPOINT = "https://storage.googleapis.com/iex/api/logos/";
 
-    private String gettingResponseFromAPI(String symbol) throws FileNotFoundException {
+    String gettingResponseFromAPI(String symbol) {
         try {
             //URLs which hold path to api, filtered by zero symbol - TBD for all symbols in the XLSX file
             for (String companyName : TradingApplication.companyNames) {
@@ -68,7 +67,7 @@ public class ConnectionToAPI {
             CustomLogger log = new CustomLogger();
             log.addToLog("Exception caught: " + ex);
         }
-        return null;
+        return symbol;
     }
 
     private JSONObject parsingJSON(String symbol, String response) throws ParseException {
@@ -96,7 +95,7 @@ public class ConnectionToAPI {
                 log.addToLog(System.getProperty("line.separator"));
                 return new Object[]{symbol.toUpperCase(), 0, 0, 0, "NO DATA"};
             }
-        } catch (ParseException | FileNotFoundException e) {
+        } catch (ParseException e) {
             CustomLogger log = new CustomLogger();
             log.addToLog("Error! File is not found");
             log.addToLog(e.getLocalizedMessage());
@@ -111,8 +110,6 @@ public class ConnectionToAPI {
         try {
             String jsonRespBlock = gettingResponseFromAPI((String) symbol);
             json = (JSONObject) parser.parse(jsonRespBlock);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -127,20 +124,16 @@ public class ConnectionToAPI {
 
         CustomLogger log = new CustomLogger();
 
-        try {
-            log.addToLog("\n");
-            log.addToLog("---------------------LIST OF PRICES------------------------");
-            log.addToLog(" latestPrice for " + symbol + " is: " + latestPrice);
-            log.addToLog(" calculationPrice for " + symbol + " is: " + calculationPrice);
-            log.addToLog(" iexRealtimePrice for " + symbol + " is: " + iexRealtimePrice);
-            log.addToLog(" delayedPrice for " + symbol + " is: " + delayedPrice);
-            log.addToLog(" extendedPrice for " + symbol + " is: " + extendedPrice);
-            log.addToLog(" iexBidPrice for " + symbol + " is: " + iexBidPrice);
-            log.addToLog(" iexAskPrice for " + symbol + " is: " + iexAskPrice);
-            log.addToLog("-----------------------------------------------------------" + "\n");
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+        log.addToLog("\n");
+        log.addToLog("---------------------LIST OF PRICES------------------------");
+        log.addToLog(" latestPrice for " + symbol + " is: " + latestPrice);
+        log.addToLog(" calculationPrice for " + symbol + " is: " + calculationPrice);
+        log.addToLog(" iexRealtimePrice for " + symbol + " is: " + iexRealtimePrice);
+        log.addToLog(" delayedPrice for " + symbol + " is: " + delayedPrice);
+        log.addToLog(" extendedPrice for " + symbol + " is: " + extendedPrice);
+        log.addToLog(" iexBidPrice for " + symbol + " is: " + iexBidPrice);
+        log.addToLog(" iexAskPrice for " + symbol + " is: " + iexAskPrice);
+        log.addToLog("-----------------------------------------------------------" + "\n");
         return new String[]{symbol.toString(), latestPrice.toString()};
     }
 }

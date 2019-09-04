@@ -5,9 +5,9 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.sql.SQLException;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
@@ -53,14 +53,12 @@ public class TradingApplication extends javax.swing.JFrame {
 
     private void loadStartLogo() {
 
-        BufferedImage img = null;
+//        BufferedImage img = null;
         try {
             linkLogoSymbol = companyNames[0];
             linkLogo = "https://storage.googleapis.com/iex/api/logos/";
             urlLogo = new URL(linkLogo + linkLogoSymbol + ".png");
             image = ImageIO.read(urlLogo);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -80,12 +78,11 @@ public class TradingApplication extends javax.swing.JFrame {
     }
 
     //importing id symbols and putting it to list of strings
-    ArrayList<String> listOfStockSymbols() {
-        ImportExcel excelread = new ImportExcel();
+    private ArrayList<String> listOfStockSymbols() {
         ArrayList<String> listOfStockSymbols = new Thread("Importing symbols") {
-            public ArrayList<String> run2() {
+            ArrayList<String> run2() {
                 System.out.println("Thread: " + getName() + " is running");
-                return excelread.importSymbolsFromExcel(path2);
+                return ImportExcel.importSymbolsFromExcel(path2);
             }
         }.run2();
 
@@ -95,11 +92,12 @@ public class TradingApplication extends javax.swing.JFrame {
     }
 
     //Creating 2D data array
-    private Object[][] addingValuesToArrays(ArrayList<String> listOfStockSymbols) throws JSONException, IOException {
+    private Object[][] addingValuesToArrays(ArrayList<String> listOfStockSymbols) throws JSONException, IOException, SQLException {
         connectionToAPI = new ConnectionToAPI();
         for (String symbol : listOfStockSymbols)
-            if(symbol != "" && symbol != null)
+            if(!symbol.equals("")){
                 connectionToAPI.extractPrices(symbol);
+            }
         log.writeLogToDisk("\\apiLog.json");
         Object[][] mainDataArrays = new Object[listOfStockSymbols.size()][listOfStockSymbols.size()];
         final AtomicBoolean terminate = new AtomicBoolean(false);
@@ -117,7 +115,7 @@ public class TradingApplication extends javax.swing.JFrame {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    if (terminate.get() == true)
+                    if (terminate.get())
                         appTitle.setText("API Extractor");
                     jProgressBar1.setValue(0);
                 }
@@ -136,26 +134,22 @@ public class TradingApplication extends javax.swing.JFrame {
         return mainDataArrays;
     }
 
-    Object[][] loadValues() throws FileNotFoundException {
-        Object[][] mainDataArrays = null;
+    private void loadValues() throws FileNotFoundException {
         try {
             for (String companyName : companyNames) {
                 if (companyName.equalsIgnoreCase(ImportExcel.importSymbolsFromExcel(TradingApplication.path2).get(0))) {
                     //instantiate 2d array for values which size is equal to a size of symbols list plus rows header
-                    mainDataArrays = addingValuesToArrays(listOfStockSymbols());
+                    Object[][] mainDataArrays = addingValuesToArrays(listOfStockSymbols());
                     log.addToLog("Values have been successfully loaded from IEXTrading API." + "\n");
                 }
             }
-
             log.addToLog("Supported symbols are: " + Arrays.toString(companyNames) + "\n" +
                     "--------------------------------------------------------------" + "\n");
-
-        } catch (FileNotFoundException ex) {
-            log.addToLog("Exception caught:" + ex);
         } catch (JSONException | IOException ex) {
             log.addToLog("Exception caught:" + ex);
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-        return mainDataArrays;
     }
 
     private void initComponents() {
@@ -302,11 +296,8 @@ public class TradingApplication extends javax.swing.JFrame {
             if (filename.getName().equals("Symbol.xlsx")) {
                 path2 = filename.getPath();
                 inputField.setText(path2);
-                try {
-                    log.addToLog("File loaded: " + filename.getName() + " under " + filename.getPath()
-                            + "\n");
-                } catch (FileNotFoundException ex) {
-                }
+                log.addToLog("File loaded: " + filename.getName() + " under " + filename.getPath()
+                        + "\n");
             } else {
                 JOptionPane.showMessageDialog(null,
                         "Please find Symbol.xlsx",
@@ -314,11 +305,7 @@ public class TradingApplication extends javax.swing.JFrame {
                         JOptionPane.ERROR_MESSAGE);
             }
         } catch (NullPointerException e) {
-            try {
-                log.addToLog("Nothing is selected");
-            } catch (FileNotFoundException ex) {
-                Logger.getLogger(TradingApplication.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            log.addToLog("Nothing is selected");
         }
     }
 
@@ -326,9 +313,11 @@ public class TradingApplication extends javax.swing.JFrame {
         if (!path2.equals("")) {
             try {
                 loadValues();
-//                new H2jdbcInsert().main(connectionToAPI.extractPrices(addingValuesToArrays(listOfStockSymbols())));
+                H2jdbcInsert.main(null);
             } catch (FileNotFoundException ex) {
                 Logger.getLogger(TradingApplication.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
             JOptionPane.showMessageDialog(null,
                     "File saved under " + System.getProperty("user.home") + "\\Desktop",
@@ -369,11 +358,7 @@ public class TradingApplication extends javax.swing.JFrame {
                             image = ImageIO.read(urlLogo.openStream());
                             jProgressBar1.setStringPainted(true);
                             Thread.sleep(2000);
-                        } catch (MalformedURLException e) {
-                            e.printStackTrace();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        } catch (InterruptedException e) {
+                        } catch (IOException | InterruptedException e) {
                             e.printStackTrace();
                         }
                     }
@@ -389,7 +374,7 @@ public class TradingApplication extends javax.swing.JFrame {
         labelLogo.addMouseListener(urlAction);
     }
 
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         java.awt.EventQueue.invokeLater(() -> new TradingApplication().setVisible(true));
         urlAction = new OpenUrlAction();
     }

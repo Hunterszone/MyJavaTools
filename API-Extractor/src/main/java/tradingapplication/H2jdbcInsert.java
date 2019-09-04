@@ -4,27 +4,28 @@ import java.sql.*;
 
 public class H2jdbcInsert {
 
-    static ConnectionToAPI apiConn = new ConnectionToAPI();
-    static String[] compNameAndPrice = apiConn.extractPrices("");
+    // API connection & extraction
+    private static ConnectionToAPI apiConn = new ConnectionToAPI();
+    private static String[] compNameAndPrice = apiConn.extractPrices(ImportExcel.importSymbolsFromExcel(TradingApplication.path2).get(0));
 
     // JDBC driver name and database URL
-    static final String JDBC_DRIVER = "org.h2.Driver";
-    static final String DB_URL = "jdbc:h2:file:C:/Users/kdren/IdeaProjects/demo-rest-api/DB_OUT"; //change to your DB_OUT path
+    private static final String JDBC_DRIVER = "org.h2.Driver";
+    private static final String DB_URL = "jdbc:h2:file:C:/Users/kdren/IdeaProjects/demo-rest-api/DB_OUT"; //change to your DB_OUT path
 
     //  Database credentials
-    static final String USER = "";
-    static final String PASS = "";
+    private static final String USER = "";
+    private static final String PASS = "";
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
         Connection conn = null;
         PreparedStatement preparedStatement = null;
-        try{
+        try {
             // STEP 1: Register JDBC driver
             Class.forName(JDBC_DRIVER);
 
             // STEP 2: Open a connection
             System.out.println("Connecting to a selected database...");
-            conn = DriverManager.getConnection(DB_URL,USER,PASS);
+            conn = DriverManager.getConnection(DB_URL, USER, PASS);
             System.out.println("Connected database successfully...");
 
             // STEP 3: Execute a query
@@ -39,21 +40,15 @@ public class H2jdbcInsert {
             // STEP 4: Clean-up environment
             preparedStatement.close();
             conn.close();
-        } catch(SQLException se) {
+        } catch (Exception se) {
             // Handle errors for JDBC
             se.printStackTrace();
-        } catch(Exception e) {
-            // Handle errors for Class.forName
-            e.printStackTrace();
         } finally {
             // finally block used to close resources
+            if (preparedStatement != null) preparedStatement.close();
             try {
-                if(preparedStatement!=null) preparedStatement.close();
-            } catch(SQLException se2) {
-            } // nothing we can do
-            try {
-                if(conn!=null) conn.close();
-            } catch(SQLException se) {
+                if (conn != null) conn.close();
+            } catch (SQLException se) {
                 se.printStackTrace();
             } // end finally try
         } // end try
