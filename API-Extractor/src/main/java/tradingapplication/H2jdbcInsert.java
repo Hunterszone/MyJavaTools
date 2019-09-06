@@ -9,12 +9,12 @@ public class H2jdbcInsert {
     private static String[] compNameAndPrice = apiConn.extractPrices(ImportExcel.importSymbolsFromExcel(TradingApplication.path2).get(0));
 
     // JDBC driver name and database URL
-    private static final String JDBC_DRIVER = "org.h2.Driver";
-    private static final String DB_URL = "jdbc:h2:file:C:/Users/kdren/IdeaProjects/demo-rest-api/DB_OUT"; //change to your DB_OUT path
+    private static final String JDBC_DRIVER = "com.mysql.jdbc.Driver"; //for H2 is "org.h2.Driver"
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/apiextractor"; //for H2 is "jdbc:h2:file:C:/Users/kdren/IdeaProjects/demo-rest-api/DB_OUT"; //change to your DB_OUT path
 
     //  Database credentials
-    private static final String USER = "";
-    private static final String PASS = "";
+    private static final String USER = "root";
+    private static final String PASS = "root";
 
     public static void main(String[] args) throws SQLException {
         Connection conn = null;
