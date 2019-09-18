@@ -1,8 +1,6 @@
 package tradingapplication;
 
 import java.sql.*;
-import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 
 public class H2jdbcInsert {
@@ -33,7 +31,7 @@ public class H2jdbcInsert {
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
             System.out.println("Connected database successfully...");
 
-            while(counter < importedSymbols.size()){
+            while(counter < importedSymbols.size() + counter){
                 // STEP 3: Execute a query
                 compNameAndPrice = apiConn.extractPrices(importedSymbols.get(0));
                 preparedStatement = conn.prepareStatement("INSERT INTO prices (COMPANYNAME, COMPANYPRICE) " + "VALUES (?,?)");
