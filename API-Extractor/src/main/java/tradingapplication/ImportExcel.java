@@ -1,10 +1,8 @@
 package tradingapplication;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.logging.Level;
 import org.apache.poi.ss.usermodel.*;
 
 public class ImportExcel {
