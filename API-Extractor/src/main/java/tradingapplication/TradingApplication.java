@@ -325,12 +325,13 @@ public class TradingApplication extends javax.swing.JFrame {
                     JOptionPane.INFORMATION_MESSAGE);
 //            outputText.setText("File saved under " + System.getProperty("user.home") + "\\Desktop");
         } // error pane if Symbol.xlsx is opened inside the project dir
-        else if (CustomLogger.checkIfFileIsOpened(System.getProperty("user.dir") + "\\Symbol.xlsx")) {
+        if (CustomLogger.checkIfFileIsOpened(FindFile.walk("C:\\"))) {
             JOptionPane.showMessageDialog(null,
                     "Symbol.xlsx is opened - please close it!",
                     "Symbol.xlsx opened",
                     JOptionPane.ERROR_MESSAGE);
-        } else {
+        } 
+        if(!CustomLogger.checkIfFileIsOpened(FindFile.walk("C:\\"))) {
 //            outputText.setText("Please select correct files");
             JOptionPane.showMessageDialog(null,
                     "Please select filepath",
