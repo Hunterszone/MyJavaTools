@@ -1,7 +1,6 @@
 package tradingapplication;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -298,6 +297,19 @@ public class TradingApplication extends javax.swing.JFrame {
                 inputField.setText(path2);
                 log.addToLog("File loaded: " + filename.getName() + " under " + filename.getPath()
                         + "\n");
+                // error pane if Symbol.xlsx is opened inside the project dir
+                if (CustomLogger.checkIfFileIsOpened(path2)) {
+                    JOptionPane.showMessageDialog(null,
+                            "Symbol.xlsx is opened - please close it!",
+                            "Symbol.xlsx opened",
+                            JOptionPane.ERROR_MESSAGE);
+                } else {
+                    // Symbol.xlsx was selected info
+                    JOptionPane.showMessageDialog(null,
+                            "Symbol.xlsx was selected",
+                            "Success!",
+                            JOptionPane.INFORMATION_MESSAGE);
+                }
             } else {
                 JOptionPane.showMessageDialog(null,
                         "Please find Symbol.xlsx",
@@ -324,15 +336,8 @@ public class TradingApplication extends javax.swing.JFrame {
                     "File saved",
                     JOptionPane.INFORMATION_MESSAGE);
 //            outputText.setText("File saved under " + System.getProperty("user.home") + "\\Desktop");
-        } // error pane if Symbol.xlsx is opened inside the project dir
-        if (CustomLogger.checkIfFileIsOpened(FindFile.walk("C:\\"))) {
-            JOptionPane.showMessageDialog(null,
-                    "Symbol.xlsx is opened - please close it!",
-                    "Symbol.xlsx opened",
-                    JOptionPane.ERROR_MESSAGE);
-        } 
-        if(!CustomLogger.checkIfFileIsOpened(FindFile.walk("C:\\"))) {
-//            outputText.setText("Please select correct files");
+        }  else {
+            // outputText.setText("Please select correct files");
             JOptionPane.showMessageDialog(null,
                     "Please select filepath",
                     "Path is not selected",

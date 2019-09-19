@@ -4,7 +4,7 @@ import java.io.File;
 
 public class FindFile {
 
-	public static String walk(String path) {
+	public static String search(String path) {
 
 		File root = new File(path);
 		File[] list = root.listFiles();
@@ -13,7 +13,7 @@ public class FindFile {
 			return "";
 
 		for (File f : list) {
-			walk(f.getAbsolutePath());
+			search(f.getAbsolutePath());
 			if (f.getName().equals("Symbol.xlsx")) {
 				System.out.println("File found!" + "\n" + "Path to file: " + f.getAbsolutePath());
 				return f.getAbsolutePath();
@@ -22,9 +22,5 @@ public class FindFile {
 			}
 		}
 		return "";
-	}
-
-	public static void main(String[] args) {
-		FindFile.walk("C:\\");
 	}
 }

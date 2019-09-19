@@ -42,7 +42,7 @@ class CustomLogger {
             // if the file is renamed
             System.out.println("file is closed");
             return false;
-        }else{
+        } else{
             // if the file didnt accept the renaming operation
             System.out.println("file is opened");
             return true;
