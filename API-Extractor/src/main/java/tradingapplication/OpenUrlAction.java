@@ -10,7 +10,13 @@ import java.net.URL;
 public class OpenUrlAction implements MouseListener {
     @Override
     public void mouseClicked(MouseEvent e) {
-        open(TradingApplication.urlLogo);
+        if (    //get image logo coordinates
+                e.getPoint().getX() >= 40 &&
+                e.getPoint().getX() <= 170 &&
+                e.getPoint().getY() >= 195 &&
+                e.getPoint().getY() <= 325) {
+            open(TradingApplication.urlLogo);
+        }
         TradingApplication.urlAction = null;
     }
 

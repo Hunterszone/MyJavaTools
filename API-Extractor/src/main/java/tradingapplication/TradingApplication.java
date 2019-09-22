@@ -19,15 +19,15 @@ import org.json.JSONException;
 
 public class TradingApplication extends javax.swing.JFrame {
 
-    private javax.swing.JButton selectButton;
-    private javax.swing.JButton exportButton;
-    private javax.swing.JButton changeLogoButton;
+    private JButton selectButton;
+    private JButton exportButton;
+    private JButton changeLogoButton;
     private JProgressBar jProgressBar1;
-    private javax.swing.JLabel appTitle;
-    private javax.swing.JLabel selectField;
-    private javax.swing.JPanel mainPanel = new javax.swing.JPanel();
-    private javax.swing.JTextField inputField;
-    private javax.swing.JLabel outputText;
+    private JPanel mainPanel = new javax.swing.JPanel();
+    private JTextField inputField;
+    private JLabel appTitle;
+    private JLabel selectField;
+    private JLabel outputText;
     private String linkLogo = "";
     private String linkLogoSymbol = "";
     private static Image image = null;
@@ -368,8 +368,9 @@ public class TradingApplication extends javax.swing.JFrame {
                             e.printStackTrace();
                         }
                     }
-                    if (terminate.get())
+                    if (terminate.get()){
                         appTitle.setText("API Extractor");
+                    }
                     jProgressBar1.setValue(0);
                     labelLogo.setIcon(new ImageIcon(image));
                     labelLogo.setText("Logo URL:  " + urlLogo);
