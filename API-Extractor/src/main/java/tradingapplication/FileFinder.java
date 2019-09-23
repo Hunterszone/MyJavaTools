@@ -10,11 +10,11 @@ public class FileFinder {
 		File[] list = root.listFiles();
 
 		if (list == null)
-			return "";
+			return "No files found!";
 
 		for (File f : list) {
 			search(f.getAbsolutePath());
-			if (f.getName().equals("Symbol.xlsx")) {
+			if (f.getName().equalsIgnoreCase("Symbol.xlsx")) {
 				System.out.println("File found!" + "\n" + "Path to file: " + f.getAbsolutePath());
 				return f.getAbsolutePath();
 			} else {
