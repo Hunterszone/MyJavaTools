@@ -292,11 +292,11 @@ public class TradingApplication extends javax.swing.JFrame {
         jfc.setVisible(true);
         try {
             File filename = jfc.getSelectedFile();
-            if (filename.getName().equals("Symbol.xlsx")) {
+            if (filename.getName().equalsIgnoreCase("Symbol.xlsx")) {
                 path2 = filename.getPath();
                 inputField.setText(path2);
-                log.addToLog("File loaded: " + filename.getName() + " under " + filename.getPath()
-                        + "\n");
+//                log.addToLog("File loaded: " + filename.getName() + " under " + filename.getPath()
+//                        + "\n");
                 // error pane if Symbol.xlsx is opened inside the project dir
                 if (CustomLogger.checkIfFileIsOpened(path2)) {
                     JOptionPane.showMessageDialog(null,
@@ -317,7 +317,7 @@ public class TradingApplication extends javax.swing.JFrame {
                         JOptionPane.ERROR_MESSAGE);
             }
         } catch (NullPointerException e) {
-            log.addToLog("Nothing is selected");
+//            log.addToLog("Nothing is selected");
         }
     }
 
