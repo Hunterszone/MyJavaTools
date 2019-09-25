@@ -3,7 +3,7 @@ package tradingapplication;
 import java.sql.*;
 import java.util.List;
 
-public class H2jdbcInsert {
+public class DbConnectivity {
 
     // API connection & extraction
     private static String[] compNameAndPrice;

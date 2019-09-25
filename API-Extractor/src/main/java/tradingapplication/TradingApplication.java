@@ -325,7 +325,7 @@ public class TradingApplication extends javax.swing.JFrame {
         if (!path2.equals("")) {
             try {
                 loadValues();
-                H2jdbcInsert.main(null);
+                DbConnectivity.main(null);
             } catch (FileNotFoundException ex) {
                 Logger.getLogger(TradingApplication.class.getName()).log(Level.SEVERE, null, ex);
             } catch (SQLException e) {
