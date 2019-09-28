@@ -11,15 +11,17 @@ using System.IO;
 using System.Net;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
+using System.Threading;
 
 namespace ApiExtractor
 {
     public partial class ApiExtractorGui : Form
     {
         private string file;
+        private bool getLogobuttonWasClicked = false;
         Random rnd = new Random();
-        string LOGOS_ENDPOINT = "https://storage.googleapis.com/iex/api/logos/";
-        string[] companyNames = {"AAPL", "GOOGL", "BAM", "XOM", "BUD", "INTC", "C", "FB",
+        private string LOGOS_ENDPOINT = "https://storage.googleapis.com/iex/api/logos/";
+        private string[] companyNames = {"AAPL", "GOOGL", "BAM", "XOM", "BUD", "INTC", "C", "FB",
             "ORCL", "BAC", "MSFT", "HD", "PFE", "PG", "JPM", "AMZN", "UNH", "T", "VZ",
             "WMT", "WFC", "CHL", "NVS", "JNJ", "TSM", "CVX", "BABA", "V"}; // input from file is TBD
 
@@ -68,12 +70,6 @@ namespace ApiExtractor
 
         private void LoadGui(object sender, EventArgs e)
         {
-            progressBar1.Minimum = 0;
-            progressBar1.Maximum = 100;
-            progressBar1.Value = 100;
-
-            int percent = (int)(((double)(progressBar1.Value - progressBar1.Minimum) /
-            (double)(progressBar1.Maximum - progressBar1.Minimum)) * 100);
 
             WebClient myWebClient = new WebClient();
             byte[] imageData = myWebClient.DownloadData("https://storage.googleapis.com/iex/api/logos/AAPL.png");
@@ -94,14 +90,23 @@ namespace ApiExtractor
 
         private void GetPartnerLogo(object sender, EventArgs e)
         {
-            for(int i = 0; i < companyNames.Length; i++)
-            {
-                progressBar1.Minimum = 0;
-                progressBar1.Maximum = 100;
-                progressBar1.Value = 100;
+            getLogobuttonWasClicked = true;
 
-                int percent = (int)(((double)(progressBar1.Value - progressBar1.Minimum) /
-                (double)(progressBar1.Maximum - progressBar1.Minimum)) * 100);
+            for (int i = 0; i < companyNames.Length; i++)
+            {
+                if (getLogobuttonWasClicked == true)
+                {
+                    progressBar1.Value = progressBar1.Maximum;
+                    getLogobuttonWasClicked = false;
+                }
+
+                if (getLogobuttonWasClicked == false)
+                {
+                    if (progressBar1.Value == progressBar1.Maximum)
+                        progressBar1.Value = 0;
+                    else
+                        progressBar1.Value = progressBar1.Maximum;
+                }
 
                 label4.Text = String.Format("Logo URL: {0}", LOGOS_ENDPOINT + companyNames[rnd.Next(i)].ToUpper() + ".png");
                 
@@ -124,7 +129,29 @@ namespace ApiExtractor
 
         private void GetProgress(object sender, EventArgs e)
         {
+            progressBar1.Minimum = 0;
+            progressBar1.Maximum = 100;
+            progressBar1.Value = 100;
 
+            int percent = (int)(((double)(progressBar1.Value - progressBar1.Minimum) /
+            (double)(progressBar1.Maximum - progressBar1.Minimum)) * 100);
+
+            using (Graphics gr = progressBar1.CreateGraphics())
+            {
+                gr.DrawString(percent.ToString() + "% Loading Progress",
+
+                    SystemFonts.DefaultFont,
+
+                    System.Drawing.Brushes.Black,
+
+                    new PointF(progressBar1.Width / 2 - (gr.MeasureString(percent.ToString() + "% Loading Progress",
+
+                        SystemFonts.DefaultFont).Width / 2.0F),
+
+                    progressBar1.Height / 2 - (gr.MeasureString(percent.ToString() + "% Loading Progress",
+
+                        SystemFonts.DefaultFont).Height / 2.0F)));
+            }
         }
 
         private void GetLogoUrl(object sender, EventArgs e)
