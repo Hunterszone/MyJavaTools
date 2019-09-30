@@ -12,13 +12,15 @@ using System.Net;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 using System.Threading;
+using System.Collections;
 
 namespace ApiExtractor
 {
     public partial class ApiExtractorGui : Form
     {
+        public static string pathInputField = "";
         private string file;
-        private bool getLogobuttonWasClicked = false;
+        private bool logobuttonWasClicked = false;
         Random rnd = new Random();
         private string LOGOS_ENDPOINT = "https://storage.googleapis.com/iex/api/logos/";
         private string[] companyNames = {"AAPL", "GOOGL", "BAM", "XOM", "BUD", "INTC", "C", "FB",
@@ -40,7 +42,7 @@ namespace ApiExtractor
             
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void browseButton(object sender, EventArgs e)
         {
             DialogResult result = openFile.ShowDialog(); // Show the dialog.
             if (result == DialogResult.OK) // Test result.
@@ -70,7 +72,6 @@ namespace ApiExtractor
 
         private void LoadGui(object sender, EventArgs e)
         {
-
             WebClient myWebClient = new WebClient();
             byte[] imageData = myWebClient.DownloadData("https://storage.googleapis.com/iex/api/logos/AAPL.png");
             label4.Text = String.Format("Logo URL: {0}", "https://storage.googleapis.com/iex/api/logos/AAPL.png");
@@ -90,22 +91,25 @@ namespace ApiExtractor
 
         private void GetPartnerLogo(object sender, EventArgs e)
         {
-            getLogobuttonWasClicked = true;
-
             for (int i = 0; i < companyNames.Length; i++)
             {
-                if (getLogobuttonWasClicked == true)
+                if (logobuttonWasClicked == false || progressBar1.Value == progressBar1.Maximum)
                 {
-                    progressBar1.Value = progressBar1.Maximum;
-                    getLogobuttonWasClicked = false;
+                    label2.Text = "API Extractor";
+                    label2.Update();
+                    progressBar1.Value = progressBar1.Minimum;
+                    progressBar1.Update();
+                    logobuttonWasClicked = true;
                 }
 
-                if (getLogobuttonWasClicked == false)
+                if (logobuttonWasClicked == true && progressBar1.Value != progressBar1.Maximum)
                 {
-                    if (progressBar1.Value == progressBar1.Maximum)
-                        progressBar1.Value = 0;
-                    else
-                        progressBar1.Value = progressBar1.Maximum;
+                    label2.Text = "Extracting...";
+                    while (progressBar1.Value < progressBar1.Maximum)
+                    {
+                        progressBar1.Value++;
+                    }
+                    logobuttonWasClicked = false;
                 }
 
                 label4.Text = String.Format("Logo URL: {0}", LOGOS_ENDPOINT + companyNames[rnd.Next(i)].ToUpper() + ".png");
@@ -157,6 +161,25 @@ namespace ApiExtractor
         private void GetLogoUrl(object sender, EventArgs e)
         {
 
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+         //importing id symbols and putting it to list of strings
+        private ArrayList listOfStockSymbols()
+        {
+            pathInputField = textBox1.Text;
+            ArrayList listOfStockSymbols = ArrayList.Synchronized(ImportExcel.importSymbolsFromExcel(pathInputField));
+            return listOfStockSymbols;
+        }
+
+        private Object[][] addingValuesToArrays(ArrayList listOfStockSymbols)
+        {
+
+            return null;
         }
     }
 }
