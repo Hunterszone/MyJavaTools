@@ -368,6 +368,7 @@ public class TradingApplication extends javax.swing.JFrame {
 				}
 			}
 		}.start();
+		urlAction = null;
 		labelLogo.addMouseListener(urlAction);
 	}
 
