@@ -9,7 +9,7 @@ import java.net.URL;
 
 public class OpenUrlAction implements MouseListener {
 
-	static public OpenUrlAction instance;
+	private static OpenUrlAction instance;
 
 	private OpenUrlAction() {
 
