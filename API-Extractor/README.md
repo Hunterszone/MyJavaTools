@@ -12,7 +12,7 @@
 
 ### FEATURES
 * The implementation of the "Show partner logo" button allows you to retrieve randomly the PNG logos for all supported symbols real-time, as they get streamed over the network, along with the respective logo URL
-* Added checks if there is a file on the path, if exactly Symbol.xlsx is selected and if Symbol.xlsx is opened in the root dir (the last one works properly **only if the .JAR-file and Symbol.xlsx are both inside the same dir**)  
+* Added checks if there is a file on the path, if Symbol.xlsx is selected and if Symbol.xlsx is opened inside the root dir
 
 ### SOURCES
 * The app supports ca. 30 symbols/companies of choice: https://www.fool.com/investing/2017/12/05/the-30-largest-companies-on-the-stock-market.aspx
