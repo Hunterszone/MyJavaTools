@@ -1,4 +1,4 @@
-# API Extractor
+# API-Extractor
 
 ### HOW TO USE
 * **IMPORTANT** - make sure you're not behind a proxy, otherwise it could be that some data is not fetched properly or NullPointerException is obtained
