@@ -16,5 +16,5 @@
 
 ### SOURCES
 * The app supports ca. 30 symbols/companies of choice: https://www.fool.com/investing/2017/12/05/the-30-largest-companies-on-the-stock-market.aspx
-* API location: https://api.iextrading.com/1.0/stock/{{supported_symbol_toLower}}/quote
+* API location: https://cloud.iexapis.com/stable/stock/{{supported_symbol_toLower}}/quote
 * Images location: https://storage.googleapis.com/iex/api/logos/{{supported_symbol_toUpper}}.png
