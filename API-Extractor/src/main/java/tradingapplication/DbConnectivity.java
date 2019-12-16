@@ -30,6 +30,10 @@ public class DbConnectivity {
             System.out.println("Connecting to a selected database...");
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
             System.out.println("Connected database successfully...");
+            
+            // Empty DB before operations
+            preparedStatement = conn.prepareStatement("DELETE FROM prices WHERE 1");
+            preparedStatement.executeUpdate();
 
             while(counter < importedSymbols.size() + counter){
                 // STEP 3: Execute a query
