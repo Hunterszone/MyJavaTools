@@ -40,9 +40,11 @@ public class TradingApplication extends javax.swing.JFrame {
 	private JLabel appTitle;
 	private JLabel selectField;
 	private JLabel outputText;
-	private String linkLogo = "";
-	private String linkLogoSymbol = "";
-	private static Image image = null;
+	private String linkLogo;
+	private String linkLogoSymbol;
+	private static final String NOT_FOUND_NAME = "images/not-found.png";
+	private static Image image;
+	private static Image notFound;
 	private ConnectionToAPI connectionToAPI;
 	static OpenUrlAction urlAction;
 	static JLabel labelLogo = new JLabel();
@@ -79,7 +81,18 @@ public class TradingApplication extends javax.swing.JFrame {
 //        }
 
 //        labelLogo = new JLabel(new ImageIcon(img));
-		labelLogo = new JLabel(new ImageIcon(image));
+		if (image != null) {
+			labelLogo = new JLabel(new ImageIcon(image));
+		} else {
+			try {
+				notFound = ImageIO.read(new File(NOT_FOUND_NAME));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			labelLogo = new JLabel(new ImageIcon(image));
+		}
+
 		labelLogo.setText("Logo URL:  " + linkLogo + linkLogoSymbol + ".png");
 		labelLogo.setFont(labelLogo.getFont().deriveFont(13f));
 		labelLogo.addMouseListener(urlAction);
@@ -362,7 +375,17 @@ public class TradingApplication extends javax.swing.JFrame {
 						appTitle.setText("API Extractor");
 					}
 					jProgressBar1.setValue(0);
-					labelLogo.setIcon(new ImageIcon(image));
+					if (image != null) {
+						labelLogo.setIcon(new ImageIcon(image));
+					} else {
+						try {
+							notFound = ImageIO.read(new File(NOT_FOUND_NAME));
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						labelLogo.setIcon(new ImageIcon(notFound));
+					}
 					labelLogo.setText("Logo URL:  " + urlLogo);
 					labelLogo.setFont(labelLogo.getFont().deriveFont(13f));
 				}
