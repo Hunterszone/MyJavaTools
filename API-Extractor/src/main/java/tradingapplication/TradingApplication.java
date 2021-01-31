@@ -31,6 +31,8 @@ import org.json.JSONException;
 
 public class TradingApplication extends javax.swing.JFrame {
 
+	private static final long serialVersionUID = 1L;
+
 	private JButton selectButton;
 	private JButton exportButton;
 	private JButton changeLogoButton;
