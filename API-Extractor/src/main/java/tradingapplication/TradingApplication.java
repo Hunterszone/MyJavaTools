@@ -331,7 +331,7 @@ public class TradingApplication extends javax.swing.JFrame {
 		if (!path2.equals("")) {
 			try {
 				loadValues();
-				DbConnectivity.main(null);
+				DbConnectivity.init();
 			} catch (FileNotFoundException ex) {
 				Logger.getLogger(TradingApplication.class.getName()).log(Level.SEVERE, null, ex);
 			} catch (SQLException e) {
