@@ -16,7 +16,7 @@ import org.json.simple.parser.ParseException;
 
 public class ConnectionToAPI {
 
-    private static final String TOKEN = "pk_f95f594bc33048ac835258af34c1910b";
+    private static final String TOKEN = "pk_226a8451650445fbbcea0339d28a9142";
     private static final String SYMBOLS_ENDPOINT = "https://cloud.iexapis.com/stable/stock/";
     private static final String LOGOS_ENDPOINT = "https://storage.googleapis.com/iex/api/logos/";
 

@@ -122,7 +122,7 @@ public class TradingApplication extends javax.swing.JFrame {
 			throws JSONException, IOException, SQLException {
 		connectionToAPI = new ConnectionToAPI();
 		for (String symbol : listOfStockSymbols)
-			if (!symbol.equals("")) {
+			if (!"".equals(symbol)) {
 				connectionToAPI.extractPrices(symbol);
 			}
 		log.writeLogToDisk("\\apiLog.json");
